@@ -1,8 +1,34 @@
 body {
-  padding: 50px;
-  font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+  background-color: #000;
+  color: #0f0;
+  font-family: monospace;
+  margin: 0;
+  padding: 0;
+  display: flex; /* Flexbox for layout */
+  height: 100vh; /* Full height of the viewport */
 }
 
-a {
-  color: #00B7FF;
+.left {
+  width: 50%; /* Take half the width */
+  padding: 20px;
+  box-sizing: border-box; /* Include padding in width calculation */
+}
+
+.right {
+  width: 50%; /* Take the other half */
+  display: flex; /* Align textarea */
+  align-items: center; /* Center vertically */
+  justify-content: center; /* Center horizontally */
+  padding: 20px;
+  box-sizing: border-box; /* Include padding in width calculation */
+}
+
+textarea {
+  width: 100%; /* Fill the container */
+  height: 100%; /* Fill the container */
+  background-color: #111; /* Optional: Dark background for textarea */
+  color: #0f0; /* Green text */
+  border: 1px solid #0f0; /* Green border */
+  resize: none; /* Disable resize if needed */
+  font-family: monospace; /* Match the page font */
 }
