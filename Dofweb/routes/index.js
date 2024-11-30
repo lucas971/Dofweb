@@ -1,6 +1,7 @@
 var express = require('express');
 var router = express.Router();
-
+var optimizer = require('./backend/optimizer')
+var dbConverter = require('./backend/dofusDbConverter')
 /* GET home page. */
 
 function DefaultInput(){
@@ -40,14 +41,16 @@ router.get('/', function(req, res, next) {
 
 router.post('/compute', async (req, res) => {
   try {
-    // Extract data from the incoming request body
-    const { text } = req.body;
+    await optimizer.RunOptimisationAsync()
+    
+    const link = await dbConverter.TreatJson()
 
-    // Run all asynchronous tasks in parallel using Promise.all
-    const results = await new Promise(resolve => setTimeout(() => resolve('Task 1 Complete'), 2000));
-
-    // Send the response with the results of the tasks
-    res.json({ message: 'All tasks completed successfully!', results, receivedText: text });
+    if (link.includes("http")){
+      res.redirect(link);
+    }
+    else{
+      res.json({ message: link });
+    }
 
   } catch (error) {
     // Handle any errors that occur during the async operations
