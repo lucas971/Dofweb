@@ -10,8 +10,7 @@ async function RunOptimisationAsync() {
             cwd: './optimizer/src/'
         });
         if (stderr) {
-            console.log(stderr)
-            return {error:stderr} // Handle errors from stderr
+            console.log(stderr)// Handle errors from stderr
         }
         return {}
     } catch (error) {
