@@ -37,4 +37,23 @@ router.get('/', function(req, res, next) {
   res.render('index', { title: 'Express', name: 'inputText', defaultText: DefaultInput()});
 });
 
+
+router.post('/compute', async (req, res) => {
+  try {
+    // Extract data from the incoming request body
+    const { text } = req.body;
+
+    // Run all asynchronous tasks in parallel using Promise.all
+    const results = await new Promise(resolve => setTimeout(() => resolve('Task 1 Complete'), 2000));
+
+    // Send the response with the results of the tasks
+    res.json({ message: 'All tasks completed successfully!', results, receivedText: text });
+
+  } catch (error) {
+    // Handle any errors that occur during the async operations
+    console.error('Error during async tasks:', error);
+    res.status(500).json({ error: 'An error occurred while processing your request.' });
+  }
+});
+
 module.exports = router;

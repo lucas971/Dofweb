@@ -1,0 +1,3 @@
+[submodule "Dofweb/optimizer"]
+	path = Dofweb/optimizer
+	url = https://github.com/titiyeahti/dofopti.git

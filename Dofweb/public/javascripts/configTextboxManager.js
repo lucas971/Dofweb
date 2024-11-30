@@ -1,11 +1,21 @@
-﻿document.addEventListener('DOMContentLoaded', () => {
-    const textarea = document.querySelector('textarea[name="message"]');
+﻿// JavaScript to handle POST request
+document.getElementById("submitBtn").addEventListener("click", function() {
+    var textValue = document.querySelector("textarea").value;
 
-    if (textarea) {
-        textarea.addEventListener('input', (e) => {
-            console.log('Typed:', e.target.value);
+    // Send the POST request with the value of the textarea
+    fetch("/compute", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+        },
+        body: JSON.stringify({text: textValue})
+    })
+        .then(response => response.json())
+        .then(data => {
+            console.log("Success:", data);
+        })
+        .catch((error) => {
+            console.error("Error:", error);
         });
-    }
-    
-    console.log(textarea)
 });
+    

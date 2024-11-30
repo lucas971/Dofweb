@@ -1,13 +1,22 @@
 var createError = require('http-errors');
 var express = require('express');
+const session = require('express-session');
 var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
-
+require('dotenv').config()
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
 
 var app = express();
+
+// Set up session middleware
+app.use(session({
+  secret: process.env.SESSION_SECRET,  // Secret for signing session cookies
+  resave: false,
+  saveUninitialized: true,
+  cookie: { secure: true }  // Make sure to set `secure: true` for HTTPS in production
+}));
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
