@@ -25,9 +25,13 @@ async function handleCompute(textValue) {
             const data = await response.json(); // Parse JSON response
             console.log('Received data:', data);
 
-
+            if (data.error){
+                document.getElementById("resultParagraphLink").innerText = "";
+                document.getElementById("resultParagraphScore").innerText = data.error
+            }
             document.getElementById("resultParagraphLink").innerText = "Link to stuff"
-            document.getElementById("resultParagraphLink").href = data.message
+            document.getElementById("resultParagraphLink").href = data.link
+            document.getElementById("resultParagraphScore").innerText = "Score : " + data.result
 
         } else {
             console.error('Failed to fetch data:', response.status);

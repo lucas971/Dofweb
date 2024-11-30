@@ -41,16 +41,21 @@ router.get('/', function(req, res, next) {
 
 router.post('/compute', async (req, res) => {
   try {
-    await optimizer.RunOptimisationAsync();
+    const optimization = await optimizer.RunOptimisationAsync();
+    
+    console.log(optimization)
+    if (optimization.error){
+      res.json({error:optimization.error });
+      return;
+    }
+    const result = await dbConverter.TreatJson();
 
-    const link = await dbConverter.TreatJson();
-
-    if (link.includes("http")) {
-      console.log(`Redirecting to: ${link}`);
-      res.json({message: link });
+    if (result.link) {
+      console.log(`Redirecting to: ${result.link}`);
+      res.json({link: result.link, result: result.value});
     } else {
-      console.log(`Sending JSON response: ${link}`);
-      res.json({ message: link });
+      console.log(`Sending JSON response: ${result.error}`);
+      res.json({ error:result.error });
     }
   } catch (error) {
     console.error('Error during async tasks:', error);

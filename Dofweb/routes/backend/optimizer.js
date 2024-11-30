@@ -11,13 +11,12 @@ async function RunOptimisationAsync() {
         });
         if (stderr) {
             console.log(stderr)
-            return stderr // Handle errors from stderr
+            return {error:stderr} // Handle errors from stderr
         }
-        console.log(stdout)
-        return stdout
+        return {}
     } catch (error) {
         console.log(error)
-        return error
+        return {error:error}
     }
 }
 

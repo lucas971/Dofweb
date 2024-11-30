@@ -45,11 +45,11 @@ async function TreatJson() {
         }
 
         // Create and return the final URL
-        return "https://www.dofusbook.net/fr/equipement/dofus-stuffer/objets?stuff=" + btoa(c);
+        return {link:"https://www.dofusbook.net/fr/equipement/dofus-stuffer/objets?stuff=" + btoa(c), value:jdata.Result}
     } catch (err) {
         // Handle errors (e.g., file not found, JSON parsing errors)
         console.error("Error reading or processing JSON file:", err);
-        throw err; // Optionally re-throw to handle it in the caller
+        return{error:err};
     }
 }
 
