@@ -2,6 +2,7 @@
 document.getElementById("submitBtn").addEventListener("click", function() {
     var textValue = document.querySelector("textarea").value;
 
+    document.getElementById("submitBtn").style.display = 'none';
     // Send the POST request with the value of the textarea
     handleCompute(textValue)
 });
@@ -18,6 +19,7 @@ async function handleCompute(textValue) {
             body: JSON.stringify({text: textValue})
         });
 
+        document.getElementById("submitBtn").style.display = 'block';
         // Check if the response is ok
         if (response.ok) {
             const data = await response.json(); // Parse JSON response
