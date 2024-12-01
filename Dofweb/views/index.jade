@@ -7,7 +7,16 @@ block content
     a(id="resultParagraphLink" target="_blank")
     h3(id="resultParagraphScore")
   .right
-    textarea(name=name)= defaultText
+    div#editor(style="height: 80%; width: 100%;")
+    script(src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.4.14/ace.js")
+    script.
+      var editor = ace.edit("editor");
+      editor.setTheme("ace/theme/monokai");
+      editor.getSession().setMode("ace/mode/javascript");
+      // Pass defaultText from Pug to JavaScript
+      var defaultText = !{JSON.stringify(defaultText)};
+      editor.setValue(defaultText);
+    //textarea(name=name)= defaultText
     .button-container
       button(id="submitBtn") Send Request
       button(id="button2") Button 2
