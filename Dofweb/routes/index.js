@@ -5,6 +5,60 @@ var dbConverter = require('./backend/dofusDbConverter')
 var fs = require('fs')
 /* GET home page. */
 
+function Doc(){
+  return "% air resistance => rpa\n" +
+  "% earth resistance => rpt\n" +
+  "% fire resistance => rpf\n" +
+  "% melee damage => dpm\n" +
+  "% melee resistance => rpm\n" +
+  "% neutral resistance => rpn\n" +
+  "% ranged damage => dpd\n" +
+  "% ranged resistance => rpd\n" +
+  "% spell damage => dps\n" +
+  "% water resistance => rpe\n" +
+  "% weapon damage => dpa\n" +
+  "ap => pa\n" +
+  "ap parry => pap\n" +
+  "ap reduction => par\n" +
+  "agility => agi\n" +
+  "air damage => doa\n" +
+  "air resistance => rea\n" +
+  "chance => cha\n" +
+  "critical => cri\n" +
+  "critical damage => doc\n" +
+  "critical resistance => rec\n" +
+  "damage => do\n" +
+  "dodge => fui\n" +
+  "earth damage => dot\n" +
+  "earth resistance => ret\n" +
+  "fire damage => dof\n" +
+  "fire resistance => ref\n" +
+  "heals => so\n" +
+  "initiative => ini\n" +
+  "intelligence => int\n" +
+  "lock => tac\n" +
+  "mp => pm\n" +
+  "mp parry => pmp\n" +
+  "mp reduction => pmr\n" +
+  "neutral damage => don\n" +
+  "neutral resistance => ren\n" +
+  "power => pui\n" +
+  "power (traps) => tpu\n" +
+  "prospecting => pp\n" +
+  "pushback damage => dop\n" +
+  "pushback resistance => rep\n" +
+  "range => po\n" +
+  "reflect => voi\n" +
+  "strength => str\n" +
+  "summons => inv\n" +
+  "trap damage => tdo\n" +
+  "vitality => vit\n" +
+  "water damage => doe\n" +
+  "water resistance => ree\n" +
+  "wisdom => sa\n" +
+  "pods => pod\n" +
+  "set_bonus => sb"
+}
 function DefaultInput(){
   return "#LEVEL\n" +
       "200\n" +
@@ -45,10 +99,9 @@ function DefaultInput(){
       "pm >= 5\n" +
       "#LOCK_ITEMS\n" +
       "%(+|-)item_name_in_english_with_no_cap.\n"
-      ""
 }
 router.get('/', function(req, res, next) {4
-  res.render('index', { title: 'Express', name: 'inputText', defaultText: DefaultInput()});
+  res.render('index', { title: 'Express', name: 'inputText', defaultText: DefaultInput(), doc: Doc()});
 });
 
 

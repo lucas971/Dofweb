@@ -40,6 +40,7 @@ textarea {
   display: flex;
   justify-content: center;
   gap: 10px; /* Add spacing between buttons */
+  margin-top: 20px;
   width: 100%
 }
   
@@ -70,10 +71,9 @@ button:hover {
   font-size: 1em;
   padding: 10px;
   box-sizing: border-box;
-  overflow: auto; /* Enable scrolling if the content exceeds the box */
-  pointer-events: none; /* Make it non-editable and non-interactive */
+  overflow-y: auto; /* Enable vertical scrolling */
+  white-space: pre-wrap; /* Preserve new lines */
 }
-
 
 #editor {
   width: 100%;
