@@ -1,6 +1,9 @@
 extends layout
 
 block content
+  script.
+    const baseInput= !{JSON.stringify({text: defaultText})};
+    
   .left
     h1 Bienvenue chez Roxfus. Le meilleur stuff, pour les meilleurs joueurs.
   .right
@@ -63,9 +66,8 @@ block content
       editor.moveCursorTo(0, 0);
     .button-container
       button(id="submitBtn") Send Request
-      button(id="button2") WIP
-      button(id="button3") WIP
-      button(id="button4") WIP
+      button(id="resetBtn") Reset to default
+      button(id="lastSentBtn") Load last sent file
     a(id="resultParagraphLink" target="_blank")
     h3(id="resultParagraphScore")
     p Si vous aimez ce site, aidez nous à améliorer notre infrastructure 😊

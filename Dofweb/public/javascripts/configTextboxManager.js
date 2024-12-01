@@ -1,13 +1,26 @@
 ﻿// JavaScript to handle POST request
 document.getElementById("submitBtn").addEventListener("click", function() {
     var textValue = editor.getValue();  // Use the 'editor' variable to get the content
-    
+    localStorage.setItem('lastText', textValue);
     // Hide the submit button after the click
     document.getElementById("submitBtn").style.display = 'none';
     document.getElementById("resultParagraphLink").innerText = "";
     document.getElementById("resultParagraphScore").innerText = "";
     // Send the POST request with the value of the Ace editor
     handleCompute(textValue);
+});
+
+function TrySetLastValue(){
+    let textValue = localStorage.getItem("lastText")
+    if (textValue){
+        editor.setValue(textValue)
+    }
+}
+document.getElementById("lastSentBtn").addEventListener("click", function(){
+    TrySetLastValue()
+})
+document.getElementById("resetBtn").addEventListener("click", function() {
+    editor.setValue(baseInput.text) 
 });
 
 async function handleCompute(textValue) {
@@ -56,7 +69,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const contents = document.querySelectorAll('.tab-content');
 
     tabs.forEach(tab => {
-        console.log(tab.innerHTML)
         tab.addEventListener('click', () => {
             // Remove active class from all tabs
             tabs.forEach(t => t.classList.remove('active'));
@@ -71,3 +83,5 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 });
+
+TrySetLastValue()
