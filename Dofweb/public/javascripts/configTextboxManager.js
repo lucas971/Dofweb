@@ -4,7 +4,8 @@ document.getElementById("submitBtn").addEventListener("click", function() {
     
     // Hide the submit button after the click
     document.getElementById("submitBtn").style.display = 'none';
-
+    document.getElementById("resultParagraphLink").innerText = "";
+    document.getElementById("resultParagraphScore").innerText = "";
     // Send the POST request with the value of the Ace editor
     handleCompute(textValue);
 });
@@ -30,9 +31,11 @@ async function handleCompute(textValue) {
                 document.getElementById("resultParagraphLink").innerText = "";
                 document.getElementById("resultParagraphScore").innerText = data.error
             }
-            document.getElementById("resultParagraphLink").innerText = "Link to stuff"
-            document.getElementById("resultParagraphLink").href = data.link
-            document.getElementById("resultParagraphScore").innerText = "Score : " + data.result
+            else{
+                document.getElementById("resultParagraphLink").innerText = "Link to stuff"
+                document.getElementById("resultParagraphLink").href = data.link
+                document.getElementById("resultParagraphScore").innerText = "Score : " + data.result
+            }
 
         } else {
             console.error('Failed to fetch data:', response.status);
