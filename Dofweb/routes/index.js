@@ -7,7 +7,12 @@ var fs = require('fs')
 
 function DefaultInput(){
   return "#LEVEL\n" +
-      "100\n" +
+      "200\n" +
+      "#MIN_CRIT\n" +
+      "%Enter a value only if you want to take\n" +
+      "%critical strike into account in the computation.\n" +
+      "%Solver will assume you have this cc in your stuf\n"+
+      "50\n" +
       "#TARGETED_SLOTS\n" +
       "amulet 1\n" +
       "hat 1\n" +
@@ -16,7 +21,7 @@ function DefaultInput(){
       "shield 1\n" +
       "belt 1\n" +
       "back 1\n" +
-      "boots 0\n" +
+      "boots 1\n" +
       "dofus 6\n" +
       "prysmaradite 1\n" +
       "pet 1\n" +
@@ -25,17 +30,22 @@ function DefaultInput(){
       "str 100\n" +
       "int 100\n" +
       "agi 100\n" +
+      "sa 100\n" +
+      "vit 100\n" +
+      "pa 1\n" +
       "pm 1\n" +
       "#DMG_LINES\n" +
-      "air 50 12 14 14 16\n" +
-      "air 50 12 14 14 16\n" +
-      "air 50 12 14 14 16\n" +
-      "air 50 12 14 14 16\n" +
+      "%decimation entaille x2\n" +
+      "terre 15 29 32 35 38\n" +
+      "terre 25 47 51 56 61\n" +
+      "terre 25 47 51 56 61\n" +
       "#CONSTRAINTS\n" +
-      "pa >= 8\n" +
-      "cri >= 50\n" +
+      "%stat_name (>=|<=|=) value\n" +
+      "pa >= 12\n" +
+      "pm >= 5\n" +
       "#LOCK_ITEMS\n" +
-      "-shaker"
+      "%(+|-)item_name_in_english_with_no_cap.\n"
+      ""
 }
 router.get('/', function(req, res, next) {4
   res.render('index', { title: 'Express', name: 'inputText', defaultText: DefaultInput()});

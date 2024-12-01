@@ -36,7 +36,14 @@ textarea {
   margin-bottom: 10px; /* Add space below the textarea */
 }
 
-button {
+.button-container {
+  display: flex;
+  justify-content: center;
+  gap: 10px; /* Add spacing between buttons */
+  width: 100%
+}
+  
+  button {
   background-color: #0f0;
   color: #000;
   border: none;
@@ -48,4 +55,21 @@ button {
 
 button:hover {
   background-color: #080;
+}
+
+.info-box {
+  position: fixed;
+  bottom: 12.5%;
+  left: 5%; /* Centers horizontally in the left 50% of the screen */
+  width: 40%;
+  height: 60%;
+  background-color: #111;
+  color: #0f0;
+  border: 1px solid #0f0;
+  font-family: monospace;
+  font-size: 1em;
+  padding: 10px;
+  box-sizing: border-box;
+  overflow: auto; /* Enable scrolling if the content exceeds the box */
+  pointer-events: none; /* Make it non-editable and non-interactive */
 }
