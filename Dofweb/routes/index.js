@@ -6,7 +6,7 @@ var fs = require('fs')
 /* GET home page. */
 
 function DefaultInput(){
-  return "#LEVEL" +
+  return "#LEVEL\n" +
       "100\n" +
       "#TARGETED_SLOTS\n" +
       "amulet 1\n" +
