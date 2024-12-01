@@ -46,7 +46,7 @@ router.post('/compute', async (req, res) => {
     console.log(new Date().toString() + " : run optimisation query");
 
     var success = true
-    await fs.writeFile("optimizer/src/discord.json", req.body.text, (err)=>{
+    await fs.writeFile("optimizer/src/inputfiles/discord.in", req.body.text, (err)=>{
       if (err){
         console.error("Error while writing discord.json")
         success = false;
