@@ -47,17 +47,22 @@ router.post('/compute', async (req, res) => {
 
     var success = true
     await fs.writeFile("optimizer/src/discord.json", req.body.text, (err)=>{
-      console.error("Error while writing discord.json")
-      res.json({error:"Error while writing discord.json"})
+      if (err){
+        console.error("Error while writing discord.json")
+        success = false;
+      }
     })
+
+    if (!success){
+      res.json({error:"Error while writing discord.json"})
+      return;
+    }
     
     if (process.platform === 'win32'){
       res.json({error:"win32 server"})
-    }
-    
-    if (!success){
       return;
     }
+    
     
     const optimization = await optimizer.RunOptimisationAsync();
     console.log(new Date().toString() + " : run optimisation completed : " + optimization);
