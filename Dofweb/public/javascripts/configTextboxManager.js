@@ -50,3 +50,24 @@ window.addEventListener('optimizationCompleted', (e) => {
     console.log('Optimization completed:', e.detail); // Handle the event data
     alert(e.detail.message); // Example action, like showing an alert with the message
 });
+
+document.addEventListener('DOMContentLoaded', () => {
+    const tabs = document.querySelectorAll('.tab');
+    const contents = document.querySelectorAll('.tab-content');
+
+    tabs.forEach(tab => {
+        console.log(tab.innerHTML)
+        tab.addEventListener('click', () => {
+            // Remove active class from all tabs
+            tabs.forEach(t => t.classList.remove('active'));
+            // Hide all tab contents
+            contents.forEach(content => content.classList.remove('active'));
+
+            // Activate the clicked tab
+            tab.classList.add('active');
+            // Show the corresponding content
+            const tabContent = document.getElementById(tab.dataset.tab);
+            tabContent.classList.add('active');
+        });
+    });
+});

@@ -6,6 +6,35 @@ var fs = require('fs')
 /* GET home page. */
 
 function Doc(){
+  return "<h3 id=\"list-of-sections\">List of sections</h3>\n" +
+      "<p>An input file is divided in various sections with a precse syntax for each.\n" +
+      "You can precise a section by writing <code>#SECTION_NAME</code> in your file.\n" +
+      "Here is the list of valid section names :</p>\n" +
+      "<ul>\n" +
+      "<li><code>LEVEL</code>, simple one, just print the level of your character.</li>\n" +
+      "<li><code>MIN_CRIT</code>, used to specify if you actually want to take critical strike into account in the computation. Here you specify the minimum critical strike chance given by your stuff as an integer. The solver will assume that you have THIS amount of crit chance in your stuff when doing computation.</li>\n" +
+      "<li><code>TARGETED_SLOTS</code>, the number of items you desire per slots. This section&#39;s syntax is <code>slot_name uint</code> where the valid slots names are :<ul>\n" +
+      "<li><code>amulet</code>, default 1;</li>\n" +
+      "<li><code>hat</code>, default 1;</li>\n" +
+      "<li><code>ring</code>, default 1;</li>\n" +
+      "<li><code>weapon</code>, default 1;</li>\n" +
+      "<li><code>shield</code>, default 1;</li>\n" +
+      "<li><code>belt</code>, default 1;</li>\n" +
+      "<li><code>back</code>, default 1;</li>\n" +
+      "<li><code>boots</code>, default 1;</li>\n" +
+      "<li><code>dofus</code>, default 6;</li>\n" +
+      "<li><code>prysmaradite</code>, default 1;</li>\n" +
+      "<li><code>pet</code>, default 1.</li>\n" +
+      "</ul>\n" +
+      "</li>\n" +
+      "<li><code>BASE_STATS</code> the additionnal stats of your character, mainly &quot;forgemagie&quot;. Syntax is the following ; <code>stat_name int</code>.</li>\n" +
+      "<li><code>DMG_LINES</code>, this section is here to help you optimize a damage round. Here you ave to give information over each damage line you want to take into account (ex: 4 lines for zoth warrior axe). Here is the syntax for a damage line : <code>elt_name line_crit_rate min_nocri max_nocri min_cri max_cri</code>. These are all integral values except for elt wich must be one of <code>air, eau, feu, terre, neutre</code>. You have to give each of the six required values even if your spell does not crit, in this case <code>crit_rate</code>must be <code>0</code>.</li>\n" +
+      "<li><code>OBJECIVE</code>, used to give simple objectives coeffs to the solver. Better not to use if already used dmg lines. Syntax : <code>stat_name int</code>.</li>\n" +
+      "<li><code>CONSTRAINTS</code>, the constraints your stuff must satisfy (e.g ap &gt;= 11). Syntax : <code>stat_name (&gt;=|&lt;=|=) value</code>.</li>\n" +
+      "<li><code>LOCK_ITEMS</code>, in this section you may force the solver to set certain items in or out from your stuff. Syntax : <code>(+|-)item_name_in_english_with_no_cap</code>.</li>\n" +
+      "</ul>\n"
+}
+function Mots(){
   return "% air resistance => rpa\n" +
   "% earth resistance => rpt\n" +
   "% fire resistance => rpf\n" +
@@ -57,7 +86,13 @@ function Doc(){
   "water resistance => ree\n" +
   "wisdom => sa\n" +
   "pods => pod\n" +
-  "set_bonus => sb"
+  "set_bonus => sb" +
+  "AIR => air\n" +
+  "FEU => feu\n" +
+  "TERRE => terre\n" +
+  "EAU => eau\n" +
+  "NEUTRE => neutre\n" +
+  "POUSSEE => poussee"
 }
 function DefaultInput(){
   return "#LEVEL\n" +
@@ -101,7 +136,7 @@ function DefaultInput(){
       "%(+|-)item_name_in_english_with_no_cap.\n"
 }
 router.get('/', function(req, res, next) {4
-  res.render('index', { title: 'Express', name: 'inputText', defaultText: DefaultInput(), doc: Doc()});
+  res.render('index', { title: 'Express', name: 'inputText', defaultText: DefaultInput(), doc: Doc(), mots:Mots()});
 });
 
 

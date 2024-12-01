@@ -2,13 +2,7 @@ extends layout
 
 block content
   .left
-    h1 Welcome to Roxfus.
-    h2 The best stuff for the best of players.
-    p Si vous aimez ce site, aidez nous à améliorer notre infrastructure 😊
-      a.button(href="https://ko-fi.com/roxfus" target="_blank")
-        img(src="https://cdn.ko-fi.com/cdn/kofi5.png?v=2" alt="Offrir un café sur Ko-fi" width="100" height="20")
-    a(id="resultParagraphLink" target="_blank")
-    h3(id="resultParagraphScore")
+    h1 Bienvenue chez Roxfus. Le meilleur stuff, pour les meilleurs joueurs.
   .right
     div#editor(style="height: 80%; width: 100%;")
     script(src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.4.14/ace.js")
@@ -72,7 +66,20 @@ block content
       button(id="button2") WIP
       button(id="button3") WIP
       button(id="button4") WIP
+    a(id="resultParagraphLink" target="_blank")
+    h3(id="resultParagraphScore")
+    p Si vous aimez ce site, aidez nous à améliorer notre infrastructure 😊
+      a.button(href="https://ko-fi.com/roxfus" target="_blank")
+        img(src="https://cdn.ko-fi.com/cdn/kofi5.png?v=2" alt="Offrir un café sur Ko-fi" width="100" height="20")
 
-  div.info-box=doc
+  div.info-box
+    div.tabs
+      button.tab(data-tab="tab1").active Documentation
+      button.tab(data-tab="tab2") Mots clés
+      button.tab(data-tab="tab3") A propos de Roxfus
+    div#tab1.tab-content.active!= doc
+    div#tab2.tab-content= mots
+    div#tab3.tab-content On est là.
 
+  script(src="https://cdnjs.cloudflare.com/ajax/libs/marked/4.3.0/marked.min.js")
   script(src="/javascripts/configTextboxManager.js")
