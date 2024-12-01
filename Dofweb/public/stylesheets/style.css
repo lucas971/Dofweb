@@ -83,22 +83,22 @@ button:hover {
 
 .ace_editor {
   font-family: monospace;
-  line-height: 2em; /* Increase line height to add space between lines */
+  line-height: 28px; /* Increase line height to add space between lines */
 }
 
 .ace_bold {
-  font-size: 2em;
+  font-size: 25px;
   font-weight: bold;
   color: orange;
 }
 
 .ace_italic {
-  font-size: 1.5em;
+  font-size: 25px;
   font-style: italic;
   color: green;
 }
 
 .ace_blue {
-  font-size: 1.5em;
+  font-size: 25px;
   color: cyan;
 }
