@@ -34,24 +34,28 @@ function DefaultInput(){
   "#LOCK_ITEMS\n" +
   "-shaker"
 }
-router.get('/', function(req, res, next) {
+router.get('/', function(req, res, next) {4
   res.render('index', { title: 'Express', name: 'inputText', defaultText: DefaultInput()});
 });
 
 
 router.post('/compute', async (req, res) => {
   try {
+
+    console.log(new Date().toString() + " : run optimisation query");
     const optimization = await optimizer.RunOptimisationAsync();
+    console.log(new Date().toString() + " : run optimisation completed : " + optimization);
     
-    console.log(optimization)
     if (optimization.error){
       res.json({error:optimization.error });
       return;
     }
+    
+    
     const result = await dbConverter.TreatJson();
 
     if (result.link) {
-      console.log(`Redirecting to: ${result.link}`);
+      console.log(new Date().toString() + " : start redirection : " + optimization);
       res.json({link: result.link, result: result.value});
     } else {
       console.log(`Sending JSON response: ${result.error}`);
