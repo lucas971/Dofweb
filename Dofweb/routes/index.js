@@ -53,6 +53,7 @@ router.post('/compute', async (req, res) => {
         console.error("Error while writing discord.json")
         success = false;
       }
+      console.log("Finished writing json file")
     })
 
     if (!success){
@@ -78,7 +79,7 @@ router.post('/compute', async (req, res) => {
     const result = await dbConverter.TreatJson();
 
     if (result.link) {
-      console.log(new Date().toString() + " : run optimisation completed : " + optimization);
+      console.log(new Date().toString() + " : link finished : " + result.link);
       res.json({link: result.link, result: result.value});
     } else {
       console.log(`Sending JSON response: ${result.error}`);
