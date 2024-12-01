@@ -10,19 +10,66 @@ block content
     div#editor(style="height: 80%; width: 100%;")
     script(src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.4.14/ace.js")
     script.
+      ace.define("ace/mode/custom_highlight_rules", function(require, exports, module) {
+        var TextHighlightRules = require("ace/mode/text_highlight_rules").TextHighlightRules;
+
+        var CustomHighlightRules = function() {
+          this.$rules = {
+            "start": [
+              {
+                token: "bold.orange", // Orange bold for lines starting with #
+                regex: "^#.*"
+              },
+              {
+                token: "italic.green", // Green italic for lines starting with %
+                regex: "^%.*"
+              },
+              {
+                token: "blue", // Blue for other lines
+                regex: ".*"
+              }
+            ]
+          };
+        };
+
+        CustomHighlightRules.prototype = new TextHighlightRules();
+        exports.CustomHighlightRules = CustomHighlightRules;
+      });
+
+      ace.define("ace/mode/custom", function(require, exports, module) {
+        var TextMode = require("ace/mode/text").Mode;
+        var CustomHighlightRules = require("ace/mode/custom_highlight_rules").CustomHighlightRules;
+
+        var CustomMode = function() {
+          this.HighlightRules = CustomHighlightRules;
+        };
+
+        CustomMode.prototype = new TextMode();
+        exports.Mode = CustomMode;
+      });
+
       var editor = ace.edit("editor");
       editor.setTheme("ace/theme/monokai");
-      editor.getSession().setMode("ace/mode/javascript");
+      editor.session.setMode("ace/mode/custom");
       // Pass defaultText from Pug to JavaScript
       var defaultText = !{JSON.stringify(defaultText)};
       editor.setValue(defaultText);
-    //textarea(name=name)= defaultText
+
+      // Enable word wrap
+      editor.getSession().setUseWrapMode(true);
+
+      // Set font size (adjust as needed)
+      editor.setFontSize(18);  // Adjust font size here
+
+      // Deselect text and move the cursor to the start
+      editor.clearSelection();
+      editor.moveCursorTo(0, 0);
     .button-container
       button(id="submitBtn") Send Request
       button(id="button2") Button 2
       button(id="button3") Button 3
       button(id="button4") Button 4
-      
+
   div.info-box Will put the stats names here
-    
+
   script(src="/javascripts/configTextboxManager.js")

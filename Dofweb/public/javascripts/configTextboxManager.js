@@ -1,12 +1,13 @@
 ﻿// JavaScript to handle POST request
 document.getElementById("submitBtn").addEventListener("click", function() {
-    var textValue = document.querySelector("textarea").value;
-
+    var textValue = editor.getValue();  // Use the 'editor' variable to get the content
+    
+    // Hide the submit button after the click
     document.getElementById("submitBtn").style.display = 'none';
-    // Send the POST request with the value of the textarea
-    handleCompute(textValue)
-});
 
+    // Send the POST request with the value of the Ace editor
+    handleCompute(textValue);
+});
 
 async function handleCompute(textValue) {
     try {
