@@ -34,6 +34,7 @@ async function TreatJson() {
         // Read the file asynchronously
         const data = await fs.readFile('./optimizer/src/discord.json', 'utf8');
 
+        console.log(data)
         // Parse JSON data
         const jdata = JSON.parse(data);
 
