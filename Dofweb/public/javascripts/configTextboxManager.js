@@ -1,28 +1,66 @@
 ﻿// JavaScript to handle POST request
-document.getElementById("submitBtn").addEventListener("click", function() {
+var currentProfile = 1
+
+function UpdateProfiles(){
+    for (var i = 1; i <= 10; i++){
+        let profileNameValue = localStorage.getItem("profileName" + i)
+        if (profileNameValue == null || profileNameValue.length === 0){
+            document.getElementById("saveFile"+i).innerText = "Profile " + i;
+        }
+        else{
+            document.getElementById("saveFile"+i).innerText = profileNameValue;
+        }
+    }
+}
+
+function Submit(){
     var textValue = editor.getValue();  // Use the 'editor' variable to get the content
-    localStorage.setItem('lastText', textValue);
+    localStorage.setItem('lastText' + currentProfile, textValue);
+    var profileName = document.getElementById("profileName").value
+    if (profileName.length > 0){
+        localStorage.setItem("profileName" + currentProfile, profileName)
+    }
+    UpdateProfiles()
     // Hide the submit button after the click
     document.getElementById("submitBtn").style.display = 'none';
     document.getElementById("resultParagraphLink").innerText = "";
     document.getElementById("resultParagraphScore").innerText = "";
     // Send the POST request with the value of the Ace editor
     handleCompute(textValue);
+}
+document.getElementById("submitBtn").addEventListener("click", function() {
+    Submit()
 });
 
 function TrySetLastValue(){
-    let textValue = localStorage.getItem("lastText")
+    let textValue = localStorage.getItem("lastText" + currentProfile)
     if (textValue){
         editor.setValue(textValue)
     }
+    let profileNameValue = localStorage.getItem("profileName" + currentProfile)
+    document.getElementById("profileName").value = ""
+    if (profileNameValue){
+        document.getElementById("profileName").placeholder = profileNameValue
+    }
+    else{
+        document.getElementById("profileName").placeholder = "Profile " + currentProfile
+    }
 }
-document.getElementById("lastSentBtn").addEventListener("click", function(){
-    TrySetLastValue()
-})
+
 document.getElementById("resetBtn").addEventListener("click", function() {
     editor.setValue(baseInput.text) 
 });
 
+document.getElementById("saveFile").addEventListener("change", function(){
+    currentProfile = document.getElementById("saveFile").value
+    TrySetLastValue()
+})
+
+document.getElementById("profileName").addEventListener("keyup", function(event) {
+    if (event.key === "Enter") {
+        Submit()
+    }
+});
 async function handleCompute(textValue) {
     try {
         // Send a POST request to the backend
@@ -82,6 +120,8 @@ document.addEventListener('DOMContentLoaded', () => {
             tabContent.classList.add('active');
         });
     });
+    
+    UpdateProfiles()
 });
 
 TrySetLastValue()
