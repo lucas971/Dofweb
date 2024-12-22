@@ -25,6 +25,7 @@ body {
 }
 
 #resultParagraphLink{
+  color: cyan;
   font-size: 2em;
 }
 textarea {
