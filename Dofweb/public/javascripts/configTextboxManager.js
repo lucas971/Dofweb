@@ -1,5 +1,7 @@
 ﻿// JavaScript to handle POST request
 var currentProfile = 1
+var contents
+var tabs
 
 function UpdateProfiles(){
     for (var i = 1; i <= 10; i++){
@@ -83,9 +85,13 @@ async function handleCompute(textValue) {
                 document.getElementById("resultParagraphScore").innerText = data.error
             }
             else{
-                document.getElementById("resultParagraphLink").innerText = "Link to stuff"
-                document.getElementById("resultParagraphLink").href = data.link
-                document.getElementById("resultParagraphScore").innerText = "Score : " + data.result
+                var list = "A stuff has been found !\n\n"
+                for(var i = 0; i < data.result.length; i++){
+                    list+= "- " + data.result[i] + "\n";
+                }
+                
+                tabs[3].click()
+                contents[3].innerHTML = list;
             }
 
         } else {
@@ -103,8 +109,8 @@ window.addEventListener('optimizationCompleted', (e) => {
 });
 
 document.addEventListener('DOMContentLoaded', () => {
-    const tabs = document.querySelectorAll('.tab');
-    const contents = document.querySelectorAll('.tab-content');
+    tabs = document.querySelectorAll('.tab');
+    contents = document.querySelectorAll('.tab-content');
 
     tabs.forEach(tab => {
         tab.addEventListener('click', () => {

@@ -90,9 +90,11 @@ block content
       button.tab(data-tab="tab1").active Documentation
       button.tab(data-tab="tab2") Mots clés
       button.tab(data-tab="tab3") A propos de Roxfus
+      button.tab(data-tab="tab4") Resultats
     div#tab1.tab-content.active!= doc
     div#tab2.tab-content= mots
     div#tab3.tab-content On est là.
-
+    div#tab4.tab-content No result yet.
+      
   script(src="https://cdnjs.cloudflare.com/ajax/libs/marked/4.3.0/marked.min.js")
   script(src="/javascripts/configTextboxManager.js")

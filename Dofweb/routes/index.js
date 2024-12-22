@@ -133,7 +133,7 @@ function DefaultInput(){
       "pa >= 12\n" +
       "pm >= 5\n" +
       "#LOCK_ITEMS\n" +
-      "%(+|-)item_name_in_english_with_no_cap.\n"
+      "%(+|-)nom de l'objet en francais sans majuscule\n"
 }
 router.get('/', function(req, res, next) {4
   res.render('index', { title: 'Express', name: 'inputText', defaultText: DefaultInput(), doc: Doc(), mots:Mots()});
