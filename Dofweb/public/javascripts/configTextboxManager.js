@@ -85,13 +85,14 @@ async function handleCompute(textValue) {
                 document.getElementById("resultParagraphScore").innerText = data.error
             }
             else{
-                var list = "A stuff has been found !\n\n" //todo : score field
-                for(var i = 0; i < data.result.length; i++){
-                    list+= "- " + data.result[i] + "\n";
+                var outputText = "A stuff has been found !\n" //todo : score field
+                outputText += "Score : " + data.result + "\n\n";
+                for(var i = 0; i < data.items.length; i++){
+                    outputText+= "- " + data.items[i] + "\n";
                 }
                 
                 tabs[3].click()
-                contents[3].innerHTML = list;
+                contents[3].innerHTML = outputText;
                 
                 document.getElementById("resultParagraphLink").innerText = "Link to stuff"
                 document.getElementById("resultParagraphLink").href = data.link

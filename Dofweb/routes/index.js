@@ -178,7 +178,7 @@ router.post('/compute', async (req, res) => {
 
     if (result.link) {
       console.log(new Date().toString() + " : link finished : " + result.link);
-      res.json({link: result.link, result: result.value});
+      res.json({link: result.link, result: result.value, items: result.items});
     } else {
       console.log(`Sending JSON response: ${result.error}`);
       res.json({ error:result.error });
