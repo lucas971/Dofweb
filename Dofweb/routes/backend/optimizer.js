@@ -22,8 +22,9 @@ async function RunOptimisationAsync() {
 */
 
 const { spawn } = require('child_process');
+const {TreatJson, GetLink} = require("./dofusDbConverter");
 
-async function RunOptimisationAsync() {
+async function RunOptimisationAsync(emitter) {
     return new Promise((resolve, reject) => {
         const child = spawn('./dofopti.out', ['inputfiles/discord.in', 'discord.json'], {
             cwd: './optimizer/src/',
@@ -31,7 +32,23 @@ async function RunOptimisationAsync() {
 
         // Listen to stdout
         child.stdout.on('data', (data) => {
-            console.log(`[stdout]: ${data.toString()}`);
+            const toRead = data.toString().split("\n");
+            toRead.forEach((line, i) => {
+                if (line.length === 0){
+                    return;
+                }
+                else if (line.includes("JSON { ")){
+                    console.log(line)
+                    let data = line.replaceAll("JSON ", "")
+                    let processedData = GetLink(data)
+                    console.log(processedData.link)
+                    emitter.onProgress(processedData.link)
+                }
+                else{
+                    console.log(`[stdout]: ${line}`);
+                }
+                console.log(`--------------------------`)
+            });
         });
 
         // Listen to stderr

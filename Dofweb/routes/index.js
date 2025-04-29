@@ -5,6 +5,12 @@ var dbConverter = require('./backend/dofusDbConverter')
 var fs = require('fs')
 /* GET home page. */
 
+const EventEmitter = require('events');
+class IntermediateResultEventEmitter extends EventEmitter {
+  onProgress(intermediateResult){
+    this.emit('intermediate', intermediateResult)
+  }
+}
 function Doc(){
   return "<h3 id=\"list-of-sections\">List of sections</h3>\n" +
       "<p>An input file is divided in various sections with a precse syntax for each.\n" +
@@ -143,6 +149,12 @@ router.get('/', function(req, res, next) {4
 router.post('/compute', async (req, res) => {
   try {
 
+    res.set({
+      'Content-Type': 'text/event-stream',
+      'Cache-Control': 'no-cache',
+      'Connection': 'keep-alive',
+    });
+    
     console.log(new Date().toString() + " : run optimisation query");
 
     let success = true;
@@ -155,37 +167,48 @@ router.post('/compute', async (req, res) => {
     })
 
     if (!success){
-      res.json({error:"Error while writing discord.json"})
+      res.write(`${JSON.stringify({error:"Error while writing discord.json"})}`)
+      res.end()
       return;
     }
     
     if (process.platform === 'win32'){
-      res.json({error:"win32 server"})
+      res.write({error:"win32 server"})
+      res.end()
       return;
     }
     
+    const emitter = new IntermediateResultEventEmitter()
+    emitter.on('intermediate', result => {
+      console.log(result)
+      res.write(`${JSON.stringify({link: result, intermediate:1})}`)
+    })
     
-    const optimization = await optimizer.RunOptimisationAsync();
+    const optimization = await optimizer.RunOptimisationAsync(emitter);
+    
     console.log(new Date().toString() + " : run optimisation completed : " + optimization);
     
     if (optimization.error){
-      res.json({error:optimization.error });
+      res.write({error:optimization.error });
+      res.end()
       return;
     }
     
-    
-    const result = await dbConverter.TreatJson();
+    const result = dbConverter.TreatJson();
 
     if (result.link) {
       console.log(new Date().toString() + " : link finished : " + result.link);
-      res.json({link: result.link, result: result.value, items: result.items});
+      res.write(`${JSON.stringify({link: result.link, result: result.value, items: result.items})}`)
+      res.end()
     } else {
       console.log(`Sending JSON response: ${result.error}`);
-      res.json({ error:result.error });
+      res.write({ error:result.error });
+      res.end()
     }
   } catch (error) {
     console.error('Error during async tasks:', error);
-    res.status(500).json({ error: 'An error occurred while processing your request.' });
+    res.write({ error: 'An error occurred while processing your request.' });
+    res.end()
   }
 });
 

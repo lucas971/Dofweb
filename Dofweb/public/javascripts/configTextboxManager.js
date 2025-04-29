@@ -63,19 +63,70 @@ document.getElementById("profileName").addEventListener("keyup", function(event)
         Submit()
     }
 });
+
+const eventSource = new EventSource('/compute');
+
+eventSource.onmessage = (e) => {
+    console.log('progress')
+};
+
 async function handleCompute(textValue) {
     try {
-        // Send a POST request to the backend
         const response = await fetch("/compute", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
             },
-            body: JSON.stringify({text: textValue})
+            body: JSON.stringify({ text: textValue })
         });
 
+        if (!response.body) {
+            throw new Error("Readable stream not supported in response");
+        }
+
+        const reader = response.body.getReader();
+        const decoder = new TextDecoder();
+        let result = "";
+        let intermediateResults = 0;
+        // Read the stream
+        while (true) {
+            const { done, value } = await reader.read();
+            if (done) break;
+
+            // Decode and append the chunk
+            const chunk = decoder.decode(value, { stream: true });
+            const json = JSON.parse(chunk);
+            if (json.error){
+                document.getElementById("resultParagraphLink").innerText = "";
+                document.getElementById("resultParagraphScore").innerText = data.error
+            }
+            else if (json.intermediate){
+                tabs[3].click()
+                intermediateResults++
+                const intermediateText = '<a target="_blank" href="' + json.link + '">Intermediate result ' + intermediateResults.toString() + '</a>';
+
+                result = intermediateText + "\n\n----------------------------------------------\n\n" + result
+            }
+            else{
+                tabs[3].click()
+                var outputText = '<a target="_blank" href="' + json.link + '">The perfect stuff has been found</a>\n';
+                outputText += "Score : " + json.result + "\n\n";
+                for(var i = 0; i < json.items.length; i++){
+                    outputText+= "- " + json.items[i] + "\n";
+                }
+
+                result = outputText + "\n\n----------------------------------------------\n\n" + result
+                document.getElementById("resultParagraphLink").innerText = "Link to stuff"
+                document.getElementById("resultParagraphLink").href = json.link
+            }
+            contents[3].innerHTML = result;
+            
+        }
+
         document.getElementById("submitBtn").style.display = 'block';
+        
         // Check if the response is ok
+        /*
         if (response.ok) {
             const data = await response.json(); // Parse JSON response
             console.log('Received data:', data);
@@ -101,7 +152,7 @@ async function handleCompute(textValue) {
 
         } else {
             console.error('Failed to fetch data:', response.status);
-        }
+        }*/
     } catch (error) {
         console.error('Error during fetch:', error);
     }

@@ -145,3 +145,13 @@ button:hover {
   font-size: 25px;
   color: cyan;
 }
+
+a, a:link, a:active, a:focus, a:visited{
+  color:cyan;
+  text-decoration:none;
+}
+
+a:hover{
+  color:darkgrey;
+  text-decoration:none;
+}

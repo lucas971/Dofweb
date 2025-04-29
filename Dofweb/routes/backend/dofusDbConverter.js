@@ -1,5 +1,5 @@
 var msgpack = require("@msgpack/msgpack")
-var fs = require('fs').promises
+var fs = require('fs')
 
 function SaveStuff(e) {
     var t = {};
@@ -29,10 +29,10 @@ function SaveStuff(e) {
     return msgpack.encode(t)
 }
 
-async function TreatJson() {
+function TreatJson(emitter) {
     try {
         // Read the file asynchronously
-        const data = await fs.readFile('./optimizer/src/discord.json', 'utf8');
+        const data = fs.readFileSync('./optimizer/src/discord.json', 'utf8')
 
         console.log(data)
         // Parse JSON data
@@ -54,6 +54,27 @@ async function TreatJson() {
     }
 }
 
+function GetLink(data){
+    try {
+        const jdata = JSON.parse(data);
+
+        // Process the data
+        const byteArray = SaveStuff(jdata);
+        let c = "";
+        for (let o = 0; o < byteArray.length; o++) {
+            c += String.fromCharCode(byteArray[o]);
+        }
+
+        // Create and return the final URL
+        return {link:"https://www.dofusbook.net/fr/equipement/dofus-stuffer/objets?stuff=" + btoa(c), value:jdata.Result, items:jdata.itemNamesFr}
+    } catch (err) {
+        // Handle errors (e.g., file not found, JSON parsing errors)
+        console.error("Error reading or processing JSON file:", err);
+        return{error:err};
+    }
+}
+
 module.exports = {
-    TreatJson
+    TreatJson,
+    GetLink
 }
