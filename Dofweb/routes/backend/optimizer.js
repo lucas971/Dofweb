@@ -24,12 +24,16 @@ async function RunOptimisationAsync() {
 const { spawn } = require('child_process');
 const {TreatJson, GetLink} = require("./dofusDbConverter");
 
-async function RunOptimisationAsync(emitter) {
+async function RunOptimisationAsync(emitter, data) {
     return new Promise((resolve, reject) => {
-        const child = spawn('./dofopti.out', ['inputfiles/discord.in', 'discord.json'], {
+        const child = spawn('./dofoptis.out', ['discord.json'], {
             cwd: './optimizer/src/',
         });
 
+        child.stdin.write(data)
+        child.stdin.end();
+        
+        let lastResult={link:"", value:0, items:[]}
         // Listen to stdout
         child.stdout.on('data', (data) => {
             const toRead = data.toString().split("\n");
@@ -40,11 +44,15 @@ async function RunOptimisationAsync(emitter) {
                 else if (line.includes("JSON { ")){
                     console.log(line)
                     let data = line.replaceAll("JSON ", "")
-                    let processedData = GetLink(data)
-                    console.log(processedData.link)
-                    emitter.onProgress(processedData.link)
+                    lastResult = GetLink(data)
+                    emitter.onIntermediate(lastResult)
                 }
                 else{
+                    const match = line.match(/\b\d+(\.\d+)?%/);
+
+                    if (match) {
+                        emitter.onProgress(match[0])
+                    }
                     console.log(`[stdout]: ${line}`);
                 }
                 console.log(`--------------------------`)
@@ -60,6 +68,7 @@ async function RunOptimisationAsync(emitter) {
         child.on('close', (code) => {
             console.log(`Process exited with code ${code}`);
             if (code === 0) {
+                emitter.onFinish(lastResult)
                 resolve({});
             } else {
                 reject(new Error(`Process exited with code ${code}`));

@@ -7,8 +7,15 @@ var fs = require('fs')
 
 const EventEmitter = require('events');
 class IntermediateResultEventEmitter extends EventEmitter {
-  onProgress(intermediateResult){
+  onIntermediate(intermediateResult){
     this.emit('intermediate', intermediateResult)
+  }
+  onProgress(percentageProgress){
+    this.emit('progress', percentageProgress)
+  }
+  
+  onFinish(finalResult){
+    this.emit('finish', finalResult)
   }
 }
 function Doc(){
@@ -157,7 +164,7 @@ router.post('/compute', async (req, res) => {
     
     console.log(new Date().toString() + " : run optimisation query");
 
-    let success = true;
+    /*let success = true;
     fs.writeFile("optimizer/src/inputfiles/discord.in", req.body.text, (err)=>{
       if (err){
         console.error("Error while writing discord.json")
@@ -170,28 +177,29 @@ router.post('/compute', async (req, res) => {
       res.write(`${JSON.stringify({error:"Error while writing discord.json"})}`)
       res.end()
       return;
-    }
-    
-    if (process.platform === 'win32'){
-      res.write({error:"win32 server"})
-      res.end()
-      return;
-    }
+    }*/
     
     const emitter = new IntermediateResultEventEmitter()
     emitter.on('intermediate', result => {
       console.log(result)
-      res.write(`${JSON.stringify({link: result, intermediate:1})}`)
+      res.write(`${JSON.stringify({link: result.link, score: result.value, intermediate:1, })}`)
     })
-    
-    const optimization = await optimizer.RunOptimisationAsync(emitter);
+    emitter.on('progress', percentage => {
+      console.log(percentage)
+      res.write(`${JSON.stringify({percentage: percentage})}`)
+    })
+    emitter.on('finish', result => {
+      console.log(result)
+      res.write(`${JSON.stringify({link: result.link, score: result.value, items:result.items})}`)
+    })
+    const optimization = await optimizer.RunOptimisationAsync(emitter, req.body.text);
     
     console.log(new Date().toString() + " : run optimisation completed : " + optimization);
     
+    /*
     if (optimization.error){
       res.write({error:optimization.error });
       res.end()
-      return;
     }
     
     const result = dbConverter.TreatJson();
@@ -204,7 +212,9 @@ router.post('/compute', async (req, res) => {
       console.log(`Sending JSON response: ${result.error}`);
       res.write({ error:result.error });
       res.end()
-    }
+    }*/
+    
+    
   } catch (error) {
     console.error('Error during async tasks:', error);
     res.write({ error: 'An error occurred while processing your request.' });

@@ -88,6 +88,7 @@ async function handleCompute(textValue) {
         const decoder = new TextDecoder();
         let result = "";
         let intermediateResults = 0;
+        let percentage = 100.0
         // Read the stream
         while (true) {
             const { done, value } = await reader.read();
@@ -95,32 +96,51 @@ async function handleCompute(textValue) {
 
             // Decode and append the chunk
             const chunk = decoder.decode(value, { stream: true });
-            const json = JSON.parse(chunk);
-            if (json.error){
-                document.getElementById("resultParagraphLink").innerText = "";
-                document.getElementById("resultParagraphScore").innerText = data.error
-            }
-            else if (json.intermediate){
-                tabs[3].click()
-                intermediateResults++
-                const intermediateText = '<a target="_blank" href="' + json.link + '">Intermediate result ' + intermediateResults.toString() + '</a>';
+            console.log(chunk)
 
-                result = intermediateText + "\n\n----------------------------------------------\n\n" + result
-            }
-            else{
-                tabs[3].click()
-                var outputText = '<a target="_blank" href="' + json.link + '">The perfect stuff has been found</a>\n';
-                outputText += "Score : " + json.result + "\n\n";
-                for(var i = 0; i < json.items.length; i++){
-                    outputText+= "- " + json.items[i] + "\n";
+            const jsonObjects = chunk.match(/({[^}]+})/g);
+
+            if (jsonObjects) {
+                for (const obj of jsonObjects) {
+                    try {
+                        const json = JSON.parse(obj);
+                        if (json.error){
+                            document.getElementById("resultParagraphLink").innerText = "";
+                            document.getElementById("resultParagraphScore").innerText = data.error
+                        }
+                        else if (json.percentage){
+                            tabs[3].click()
+                            percentage = parseFloat(json.percentage)
+                        }
+                        else if (json.intermediate){
+                            tabs[3].click()
+                            intermediateResults++
+                            const intermediateText = '<a target="_blank" href="' + json.link + '">Intermediate result ' + intermediateResults.toString() + '</a>';
+
+                            result = intermediateText + "\n\n----------------------------------------------\n\n" + result
+                        }
+                        else{
+                            tabs[3].click()
+                            var outputText = '<a target="_blank" href="' + json.link + '">The perfect stuff has been found</a>\n';
+                            outputText += "Score : " + json.score + "\n\n";
+                            for(var i = 0; i < json.items.length; i++){
+                                outputText+= "- " + json.items[i] + "\n";
+                            }
+
+                            result = outputText + "\n\n----------------------------------------------\n\n" + result
+                            document.getElementById("resultParagraphLink").innerText = "Link to stuff"
+                            document.getElementById("resultParagraphLink").href = json.link
+                        }
+                        let progressText = "";
+                        if (percentage >= 0.1){
+                            progressText = "CURRENT PROGRESS : ["+(100.0 - percentage).toString() +"%]\n"
+                        }
+                        contents[3].innerHTML = progressText + result;
+                    } catch (e) {
+                        console.error("Invalid JSON chunk:", obj, e);
+                    }
                 }
-
-                result = outputText + "\n\n----------------------------------------------\n\n" + result
-                document.getElementById("resultParagraphLink").innerText = "Link to stuff"
-                document.getElementById("resultParagraphLink").href = json.link
             }
-            contents[3].innerHTML = result;
-            
         }
 
         document.getElementById("submitBtn").style.display = 'block';
