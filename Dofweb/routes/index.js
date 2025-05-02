@@ -148,7 +148,7 @@ function DefaultInput(){
       "#LOCK_ITEMS\n" +
       "%(+|-)nom de l'objet en francais sans majuscule\n"
 }
-router.get('/', function(req, res, next) {4
+router.get('/', function(req, res, next) {
   res.render('index', { title: 'Express', name: 'inputText', defaultText: DefaultInput(), doc: Doc(), mots:Mots()});
 });
 
@@ -191,6 +191,7 @@ router.post('/compute', async (req, res) => {
     emitter.on('finish', result => {
       console.log(result)
       res.write(`${JSON.stringify({link: result.link, score: result.value, items:result.items})}`)
+      res.end()
     })
     const optimization = await optimizer.RunOptimisationAsync(emitter, req.body.text);
     
